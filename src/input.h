@@ -17,7 +17,9 @@
 /// @param minimo
 /// @param maximoDeReintentos
 /// @return
-int getInt(int * pNumeroIngresado,char * mensaje,char * mensajeError,int maximo, int minimo, int maximoDeReintentos);
+int utn_getNumber(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos);
+
+
 
 
 #endif /* INPUT_H_ */

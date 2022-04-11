@@ -7,65 +7,68 @@
 
 #include "input.h"
 #include <stdio.h>
+#include <stdlib.h>
 
-int getInt(int * pNumeroIngresado,char * mensaje,char * mensajeError,
-		int maximo, int minimo, int maximoDeReintentos){
+// firma de la func. static
 
-	int auxNumeroIngresado;
-	int retorno;
-	retorno = -1;
+static int getInt(int* pResultado);
 
-	if(pNumeroIngresado != NULL && maximo >= minimo && maximoDeReintentos>= 0){
-		do{
-			printf("%s", mensaje);
-			scanf("%d", &auxNumeroIngresado);
-			maximoDeReintentos--;
+//
 
-			if(auxNumeroIngresado >= minimo && auxNumeroIngresado <= maximo){
-						*pNumeroIngresado = auxNumeroIngresado;
-						retorno = 0;
-						break;
-			}else{
-				printf("%s", mensajeError);
-			}
-
-		}while(maximoDeReintentos > 0);
-	}
-
-	return retorno;
-}
-
-/* estas estan hechas por mi 08/04/2022 - hacerla mierda con el apunte de inputs
-
-int UTN_getInt(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos)
+int utn_getNumber(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos)
 {
 	int aux;
 	int i;
 	int retorno;
-
-	retorno=1; // salio mal
 
 	if(pResultado!=NULL && mensaje!=NULL && mensajeError!=NULL && minimo<maximo && reintentos>=0)
 	{
 		for(i=0; i<reintentos; i++)
 		{
 			printf("%s", mensaje);
-			scanf("%d", &aux);
-			if(aux>=minimo && aux<=maximo)
-			{
-				retorno=0; // salio bien
-				*pResultado=aux;
-				break;
-			}
-			else
-			{
-				printf("%s", mensajeError);
-				retorno=1;
-			}
+			if(getInt(&aux)==1)
+				{
+					if(aux>=minimo && aux<=maximo)
+						{
+							break;
+						}
+						fflush(stdin);
+
+						reintentos--;
+						printf(mensajeError);
+				}
 		}
+
+		if(reintentos==0)
+		{
+			retorno=1; // salio mal
+		}
+		else
+		{
+			retorno=0;
+			*pResultado = aux;
+		}
+
 	}
+
 	return retorno;
 }
+
+static int getInt(int* pResultado)
+{
+	char buffer[64];
+	scanf("%s",buffer);
+
+	printf("\nEstamos en la static func.\n");
+
+	*pResultado = atoi(buffer);
+
+	return -1;
+}
+
+/* estas estan hechas por mi 08/04/2022 - hacerla mierda con el apunte de inputs
+
+
 
 int UTN_getChar(char* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos)
 {
