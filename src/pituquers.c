@@ -25,54 +25,42 @@ int utn_getNumber(int* pResultado, char* mensaje, char* mensajeError, int minimo
 int main(void) {
 	setbuf(stdout, NULL);
 
-	int edad;
+	int edadIngresada;
 	int alturaDelDomicilio;
-	int validacionRetorno;
-	int opcionDelMenu;
+	int respuestaIngresada;
 
-	while(opcionDelMenu!=3)
+	edadIngresada = 0;
+	alturaDelDomicilio = 0;
+
+	do
 	{
-		printf("1) Ingresar edad\n");
-		printf("2) Ingresar altura\n");
-		printf("3) Salir\n");
-
-		validacionRetorno = utn_getNumber(&opcionDelMenu,"Ingrese la opcion que quiera:\n"
-					,"La opcion es incorrecta:\n",3,1,1);
-		if(validacionRetorno == 0)
+		printf(""
+		"1) ingresar edad (%d)\n"
+		"2) Ingresar altura (%d)\n"
+		"3) Salir\n",edadIngresada, alturaDelDomicilio);
+		if(utn_getNumber(&respuestaIngresada, "Por favor elija una opcion \n", "Error! no se pudo guardar la seleccion\n", 1, 3, 2)==0)
 		{
-			switch(opcionDelMenu)
+			switch(respuestaIngresada)
 			{
 				case 1:
-					validacionRetorno = utn_getNumber(&edad,"Ingrese la edad entre 18 y 99:\n"
-								,"La edad es incorrecta:\n",99,18,2);
-						if(validacionRetorno == 0)
-						{
-							printf("%d", edad);
-						}
-						else
-						{
-							printf("La edad no fue ingresada bien\n");
-						}
-					break;
+					utn_getNumber(&edadIngresada, "Por favor ingrese su edad ", "Error! en edad ingresada\n", 18, 90, 2);
+				break;
 				case 2:
-					validacionRetorno = utn_getNumber(&alturaDelDomicilio,"Ingrese la altura de su casa:\n"
-								,"La altura de su casa es incorrecta:\n",60000,1,2);
-						if(validacionRetorno == 0)
-						{
-							printf("%d", alturaDelDomicilio);
-						}
-						else
-						{
-							printf("La altura no fue ingresada bien\n");
-					}
-					break;
-
-				case 3:
-					printf("Nos vimos\n");
-					break;
+					utn_getNumber(&alturaDelDomicilio, "Por favor ingrese su altura de domicilio ", "Error! en altura ingresada\n", 1, 17000, 2);
+				break;
 			}
+
 		}
-	}
-	return 0;
+		else
+		{
+			printf("\nPor favor elija una de las 2 opciones!\n\n");
+		}
+
+
+	}while(respuestaIngresada!=3);
+
+	printf("\nAdios!!!\n");
+
+	return EXIT_SUCCESS;
 }
 

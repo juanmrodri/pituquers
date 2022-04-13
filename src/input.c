@@ -6,99 +6,139 @@
  */
 
 #include "input.h"
-#include <stdio.h>
 #include <stdlib.h>
 
-// firma de la func. static
+// firma de las func. static
 
 static int getInt(int* pResultado);
 
+static int isNumeric(char* cadena);
+
+static int myGets(char* cadena, int longitud);
+
 //
+
+
 
 int utn_getNumber(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos)
 {
 	int aux;
 	int i;
-	int retorno;
+	int ret;
 
-	if(pResultado!=NULL && mensaje!=NULL && mensajeError!=NULL && minimo<maximo && reintentos>=0)
-	{
-		for(i=0; i<reintentos; i++)
+		if(pResultado!=NULL && mensaje!=NULL && mensajeError!=NULL && minimo<=maximo && reintentos>=0)
 		{
-			printf("%s", mensaje);
-			if(getInt(&aux)==1)
-				{
-					if(aux>=minimo && aux<=maximo)
-						{
-							break;
-						}
-						fflush(stdin);
-
-						reintentos--;
-						printf(mensajeError);
-				}
-		}
-
-		if(reintentos==0)
-		{
-			retorno=1; // salio mal
-		}
-		else
-		{
-			retorno=0;
-			*pResultado = aux;
-		}
-
-	}
-
-	return retorno;
-}
-
-static int getInt(int* pResultado)
-{
-	char buffer[64];
-	scanf("%s",buffer);
-
-	printf("\nEstamos en la static func.\n");
-
-	*pResultado = atoi(buffer);
-
-	return -1;
-}
-
-/* estas estan hechas por mi 08/04/2022 - hacerla mierda con el apunte de inputs
-
-
-
-int UTN_getChar(char* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos)
-{
-		char aux;
-		int i;
-		int retorno;
-
-		retorno=1; // salio mal
-
-		if(pResultado!=NULL && mensaje!=NULL && mensajeError!=NULL && minimo<maximo && reintentos>=0)
-		{
-			for(i=0; i<reintentos; i++)
+			for(i=0;i<reintentos;i++)
 			{
-				printf("%s", mensaje);
-				scanf("%c", &aux);
-				if(aux>=minimo && aux<=maximo)
+				printf("%s",mensaje);
+				//scanf("%d",&aux);
+				if(getInt(&aux) == 0 && aux >= minimo && aux <= maximo)
 				{
-					retorno=0; // salio bien
-					*pResultado=aux;
+					*pResultado = aux;
+					ret=0; // salio bien
 					break;
 				}
 				else
 				{
-					printf("%s", mensajeError);
-					retorno=1;
+					printf("%s",mensajeError);
+					reintentos--;
 				}
 			}
 		}
-		return retorno;
+		else
+		{
+			printf("%s",mensaje);
+			ret=1; // salio mal
+		}
+
+	return ret;
 }
 
- */
+static int getInt(int* pResultado)
+{
+	int ret;
+	char buffer[4096];
 
+	ret=1;
+
+	if(myGets(buffer,sizeof(buffer))==0 && isNumeric(buffer))
+	{
+		ret=0;
+		*pResultado = atoi(buffer);
+	}
+	return ret;
+}
+
+static int myGets(char* cadena, int longitud)
+{
+	fflush(stdin);
+	fgets(cadena,longitud,stdin);
+
+	cadena[strlen(cadena)-1]='\0'; // arregla el enter que se agrega al final, para que fgets cargue correctamente la cadena
+
+	return 0;
+}
+
+static int isNumeric(char* cadena)
+{
+	int ret=1;
+	int i=0; // me tomo esta licencia aca
+
+	if(cadena[0] == '-') // negativos
+	{
+		i = 1;
+	}
+	for( ; cadena[i] !='\0'; i++)
+	{
+		if(cadena[i] > '9' || cadena[i] < '0')
+		{
+			ret = 0;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+
+/*
+
+int utn_getNumber(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos)
+{
+	int aux;
+	int i;
+	int ret;
+	//char bufferCadenaAux[16];
+
+		if(pResultado!=NULL && mensaje!=NULL && mensajeError!=NULL && minimo<=maximo && reintentos>=0)
+		{
+			for(i=0; i<reintentos; i++)
+			{
+				printf("%s", mensaje);
+				if(getInt(&aux)==0)
+				{
+					if(aux>=minimo && aux<=maximo)
+					{
+						break;
+					}
+						reintentos--;
+						printf(mensajeError);
+				}
+			}
+
+
+			if(reintentos==0)
+			{
+				ret=1; // salio mal
+			}
+			else
+			{
+				ret=0;
+				*pResultado = aux;
+			}
+		}
+
+	return ret;
+}
+
+*/
